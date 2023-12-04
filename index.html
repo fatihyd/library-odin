@@ -16,7 +16,17 @@
 
     <main>
         <button id="add-book">+ add book</button>
-        <div id="book-container"></div>
+        <div id="books-container"></div>
+        <dialog>
+            <form action="" id="add-book-form">
+                <input type="text" id="author-input" name="author" placeholder="Author">
+                <input type="text" id="title-input" name="title" placeholder="Title">
+                <input type="number" id="pages-input" name="pages" placeholder="Pages">
+                <label for="read-input">Have you read it?</label>
+                <input type="checkbox" id="read-input" name="read">
+                <button type="submit" id="submit-button" autofocus>Submit</button>
+            </form>
+        </dialog>
     </main>
 </body>
 
