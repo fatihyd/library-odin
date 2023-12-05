@@ -1,9 +1,10 @@
 /* Book object constructor */
-function Book(author, title, numOfPages, isRead) {
+function Book(author, title, numOfPages, isRead, bookContainer) {
     this.author = author;
     this.title = title;
     this.numOfPages = numOfPages;
     this.isRead = isRead;
+    this.bookContainer = bookContainer;
 }
 
 /* array of Book objects */
@@ -18,6 +19,8 @@ let dialog = document.querySelector("dialog");
 document.addEventListener("click", function (event) {
     if (event.target.id === "submit-button") {
         submitHandler();
+    } else if (event.target.className === "remove-button") {
+        removeHandler(event);
     }
 })
 
@@ -36,13 +39,14 @@ function addBookHandler() {
 
 /* seperate function to handle the Submit button */
 function submitHandler() {
-    /* gets the input values */
+    /* gets the input values and creates a container */
     let author = document.querySelector("#author-input").value;
     let title = document.querySelector("#title-input").value;
     let numOfPages = document.querySelector("#pages-input").value;
     let isRead = document.querySelector("#read-input").checked;
+    let bookContainer = createBookContainer(author, title, numOfPages, isRead);
     /* creates a new Book object and adds it to the library */
-    let newBook = new Book(author, title, numOfPages, isRead);
+    let newBook = new Book(author, title, numOfPages, isRead, bookContainer);
     myLibrary.push(newBook);
     /* resets the form */
     document.querySelector("#add-book-form").reset();
@@ -51,22 +55,38 @@ function submitHandler() {
     displayAllBooks();
 }
 
-function createBookElement(book) {
+function removeHandler(event) {
+    let bookContainerToRemove = event.target.parentElement;
+    let indexToRemove;
+    for (let i = 0; i < myLibrary.length; i++) {
+        if (myLibrary[i].bookContainer === bookContainerToRemove) {
+            indexToRemove = i;
+        }
+    }
+    myLibrary.splice(indexToRemove, 1);
+    displayAllBooks();
+}
+
+function createBookContainer(author, title, numOfPages, isRead) {
     let bookContainer = document.createElement("div");
 
-    let author = document.createElement("p");
-    author.textContent = book.author;
+    let authorElement = document.createElement("p");
+    authorElement.textContent = "author: " + author;
 
-    let title = document.createElement("p");
-    title.textContent = book.title;
+    let titleElement = document.createElement("p");
+    titleElement.textContent = "title: " + title;
 
-    let numOfPages = document.createElement("p");
-    numOfPages.textContent = book.numOfPages;
+    let numOfPagesElement = document.createElement("p");
+    numOfPagesElement.textContent = numOfPages + " pages";
 
-    let isRead = document.createElement("p");
-    isRead.textContent = book.isRead;
+    let isReadElement = document.createElement("p");
+    isReadElement.textContent = isRead;
 
-    bookContainer.append(author, title, numOfPages, isRead);
+    let removeButton = document.createElement("button");
+    removeButton.className = "remove-button";
+    removeButton.textContent = "remove book";
+
+    bookContainer.append(authorElement, titleElement, numOfPagesElement, isReadElement, removeButton);
     return bookContainer;
 }
 
@@ -75,6 +95,6 @@ function displayAllBooks() {
     booksContainer.innerHTML = "";
     /* adds all books in library to the DOM */
     for (let i = 0; i < myLibrary.length; i++) {
-        booksContainer.appendChild(createBookElement(myLibrary[i]));
+        booksContainer.appendChild(myLibrary[i].bookContainer);
     }
 }
