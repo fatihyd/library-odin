@@ -1,3 +1,4 @@
+/* Book object constructor */
 function Book(author, title, numOfPages, isRead) {
     this.author = author;
     this.title = title;
@@ -5,66 +6,75 @@ function Book(author, title, numOfPages, isRead) {
     this.isRead = isRead;
 }
 
+/* array of Book objects */
 let myLibrary = [];
 
+/* elements already in the DOM */
 let booksContainer = document.querySelector("#books-container");
 let addBookButton = document.querySelector("#add-book");
-let submitButton = document.querySelector("#submit-button");
+let dialog = document.querySelector("dialog");
 
+/* event listeners for the elements that do not exist yet */
+document.addEventListener("click", function (event) {
+    if (event.target.id === "submit-button") {
+        submitHandler();
+    }
+})
+
+/* event listener for the Add Book button */
 addBookButton.addEventListener("click", addBookHandler);
 
+/* seperate function to handle the Add Book button */
 function addBookHandler() {
-    // show the dialog
-    let dialog = document.querySelector("dialog");
+    /* shows the dialog */
     dialog.showModal();
-
-    // prevent page refresh
+    /* prevents page refresh */
     document.querySelector("#add-book-form").addEventListener("submit", function (event) {
         event.preventDefault();
     })
+}
 
-    submitButton.addEventListener("click", function () {
-        // Get the input values
-        let author = document.querySelector("#author-input").value;
-        let title = document.querySelector("#title-input").value;
-        let numOfPages = document.querySelector("#pages-input").value;
-        let isRead = document.querySelector("#read-input").checked;
+/* seperate function to handle the Submit button */
+function submitHandler() {
+    /* gets the input values */
+    let author = document.querySelector("#author-input").value;
+    let title = document.querySelector("#title-input").value;
+    let numOfPages = document.querySelector("#pages-input").value;
+    let isRead = document.querySelector("#read-input").checked;
+    /* creates a new Book object and adds it to the library */
+    let newBook = new Book(author, title, numOfPages, isRead);
+    myLibrary.push(newBook);
+    /* resets the form */
+    document.querySelector("#add-book-form").reset();
+    /* closes the dialog and displays all books */
+    dialog.close();
+    displayAllBooks();
+}
 
-        // Create a Book object and add it to the array
-        let newBook = new Book(author, title, numOfPages, isRead);
-        myLibrary.push(newBook);
+function createBookElement(book) {
+    let bookContainer = document.createElement("div");
 
-        // Reset the form
-        document.querySelector("#add-book-form").reset();
+    let author = document.createElement("p");
+    author.textContent = book.author;
 
-        // Close the dialog and display all books
-        dialog.close();
-        displayAllBooks();
-    })
+    let title = document.createElement("p");
+    title.textContent = book.title;
+
+    let numOfPages = document.createElement("p");
+    numOfPages.textContent = book.numOfPages;
+
+    let isRead = document.createElement("p");
+    isRead.textContent = book.isRead;
+
+    bookContainer.append(author, title, numOfPages, isRead);
+    return bookContainer;
 }
 
 function displayAllBooks() {
-    // clear
-    while (booksContainer.firstChild) {
-        booksContainer.removeChild(booksContainer.firstChild);
-    }
-
+    /* clears all previous books in the DOM */
+    booksContainer.innerHTML = "";
+    /* adds all books in library to the DOM */
     for (let i = 0; i < myLibrary.length; i++) {
-        let bookContainer = document.createElement("div");
-
-        let author = document.createElement("p");
-        author.textContent = myLibrary[i].author;
-
-        let title = document.createElement("p");
-        title.textContent = myLibrary[i].title;
-
-        let numOfPages = document.createElement("p");
-        numOfPages.textContent = myLibrary[i].numOfPages;
-
-        let isRead = document.createElement("p");
-        isRead.textContent = myLibrary[i].isRead;
-
-        bookContainer.append(author, title, numOfPages, isRead);
-        booksContainer.appendChild(bookContainer);
+        booksContainer.appendChild(createBookElement(myLibrary[i]));
     }
 }
