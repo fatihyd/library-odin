@@ -66,3 +66,32 @@ main {
     font-size: 20px;
     background-color: white;
 }
+
+#books-container button,
+dialog form button {
+    border: none;
+    color: white;
+    font-weight: bold;
+    width: 120px;
+    height: 40px;
+    border-radius: 15px;
+    font-size: 15px;
+    align-self: center;
+    margin-bottom: 20px;
+}
+
+/* dialog */
+dialog form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+}
+
+dialog form input {
+    margin: 20px;
+}
+
+dialog form button {
+    color: black;
+}

@@ -21,6 +21,8 @@ document.addEventListener("click", function (event) {
         submitHandler();
     } else if (event.target.className === "remove-button") {
         removeHandler(event);
+    } else if (event.target.className === "read-button") {
+        readButtonHandler(event);
     }
 })
 
@@ -67,6 +69,23 @@ function removeHandler(event) {
     displayAllBooks();
 }
 
+function readButtonHandler(event) {
+    let bookContainer = event.target.parentElement;
+    for (let i = 0; i < myLibrary.length; i++) {
+        if (myLibrary[i].bookContainer === bookContainer) {
+            if (event.target.textContent === "read") {
+                myLibrary[i].isRead = false;
+                event.target.textContent = "not read";
+                event.target.style.backgroundColor = "rgb(224, 79, 99)";
+            } else if (event.target.textContent === "not read") {
+                myLibrary[i].isRead = true;
+                event.target.textContent = "read";
+                event.target.style.backgroundColor = "rgb(99, 218, 99)";
+            }
+        }
+    }
+}
+
 function createBookContainer(author, title, numOfPages, isRead) {
     let bookContainer = document.createElement("div");
 
@@ -79,14 +98,17 @@ function createBookContainer(author, title, numOfPages, isRead) {
     let numOfPagesElement = document.createElement("p");
     numOfPagesElement.textContent = numOfPages + " pages";
 
-    let isReadElement = document.createElement("p");
-    isReadElement.textContent = isRead;
+    let isReadButton = document.createElement("button");
+    isReadButton.className = "read-button";
+    isReadButton.textContent = isRead ? "read" : "not read";
+    isReadButton.style.backgroundColor = isRead ? "rgb(99, 218, 99)" : "rgb(224, 79, 99)";
 
     let removeButton = document.createElement("button");
     removeButton.className = "remove-button";
     removeButton.textContent = "remove book";
+    removeButton.style.backgroundColor = "black";
 
-    bookContainer.append(authorElement, titleElement, numOfPagesElement, isReadElement, removeButton);
+    bookContainer.append(authorElement, titleElement, numOfPagesElement, isReadButton, removeButton);
     return bookContainer;
 }
 
