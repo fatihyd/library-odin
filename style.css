@@ -95,3 +95,7 @@ dialog form input {
 dialog form button {
     color: black;
 }
+
+.remove-button {
+    background-color: black;
+}

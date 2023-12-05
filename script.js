@@ -52,12 +52,13 @@ function submitHandler() {
     myLibrary.push(newBook);
     /* resets the form */
     document.querySelector("#add-book-form").reset();
-    /* closes the dialog and displays all books */
+    /* closes the dialog and adds the book to the DOM */
     dialog.close();
-    displayAllBooks();
+    booksContainer.appendChild(bookContainer);
 }
-
+/* seperate function to handle the Remove button */
 function removeHandler(event) {
+    /* removes the book from the library */
     let bookContainerToRemove = event.target.parentElement;
     let indexToRemove;
     for (let i = 0; i < myLibrary.length; i++) {
@@ -66,9 +67,10 @@ function removeHandler(event) {
         }
     }
     myLibrary.splice(indexToRemove, 1);
-    displayAllBooks();
+    /* removes the book from the DOM */
+    bookContainerToRemove.remove();
 }
-
+/* seperate function to handle the Read/Not Read button */
 function readButtonHandler(event) {
     let bookContainer = event.target.parentElement;
     for (let i = 0; i < myLibrary.length; i++) {
@@ -85,7 +87,7 @@ function readButtonHandler(event) {
         }
     }
 }
-
+/* returns a new book container with the given input */
 function createBookContainer(author, title, numOfPages, isRead) {
     let bookContainer = document.createElement("div");
 
@@ -106,17 +108,7 @@ function createBookContainer(author, title, numOfPages, isRead) {
     let removeButton = document.createElement("button");
     removeButton.className = "remove-button";
     removeButton.textContent = "remove book";
-    removeButton.style.backgroundColor = "black";
 
     bookContainer.append(authorElement, titleElement, numOfPagesElement, isReadButton, removeButton);
     return bookContainer;
-}
-
-function displayAllBooks() {
-    /* clears all previous books in the DOM */
-    booksContainer.innerHTML = "";
-    /* adds all books in library to the DOM */
-    for (let i = 0; i < myLibrary.length; i++) {
-        booksContainer.appendChild(myLibrary[i].bookContainer);
-    }
 }
