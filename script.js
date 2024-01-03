@@ -100,6 +100,12 @@ function addBookHandler() {
 
 // seperate function to handle the Submit button  
 function submitHandler() {
+    let form = document.querySelector("#add-book-form");
+    // Check if the form is valid
+    if (!form.checkValidity()) {
+        // Form is not valid, return early
+        return;
+    }
     // gets the input values  
     let author = document.querySelector("#author-input").value;
     let title = document.querySelector("#title-input").value;
@@ -110,11 +116,12 @@ function submitHandler() {
     library.addToLibrary(newBook);
     let bookContainer = newBook.createContainer();
     // resets the form  
-    document.querySelector("#add-book-form").reset();
+    form.reset();
     // closes the dialog and adds the book to the DOM  
     dialog.close();
     booksContainer.appendChild(bookContainer);
 }
+
 // seperate function to handle the Remove button  
 function removeHandler(event) {
     // removes the book from the library  
